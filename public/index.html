@@ -1,109 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- SEO & Meta Enhancements -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Join the Javlin Waitlist – Remember What Matters</title>
-  <meta name="description" content="Join Javlin’s AI Memory Engine waitlist to get personalized spaced-repetition reminders." />
-  <link rel="canonical" href="https://javlin-waitlist.vercel.app/" />
-  <meta name="robots" content="noindex" />
-  <!-- Open Graph -->
-  <meta property="og:title" content="Join the Javlin Waitlist – Remember What Matters" />
-  <meta property="og:description" content="Join Javlin’s AI Memory Engine waitlist to get personalized spaced-repetition reminders." />
-  <meta property="og:image" content="https://javlin-waitlist.vercel.app/og-image.png" />
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Join the Javlin Waitlist – Remember What Matters" />
-  <meta name="twitter:description" content="Join Javlin’s AI Memory Engine waitlist to get personalized spaced-repetition reminders." />
-  <meta name="twitter:image" content="https://javlin-waitlist.vercel.app/og-image.png" />
-  <!-- JSON-LD Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Javlin",
-    "url": "https://javlin-waitlist.vercel.app/"
-  }
-  </script>
-
-  <!-- Font-loading & CSS Variables -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-
-  <!-- Inline Critical Hero CSS -->
-  <style>
-    :root {
-      --font-sans: 'Inter','Helvetica Neue',Arial,sans-serif;
-      --color-jet-black: #131313;
-      --color-white: #FAFAFA;
-      --color-neural-blue: #5151FF;
-      --color-soft-gray: #EAEAEA;
-    }
-    body {
-      margin: 0;
-      font-family: var(--font-sans);
-      color: var(--color-white);
-      background: var(--color-jet-black);
-    }
-    .hero {
-      text-align: center;
-      padding: 4rem 1rem;
-    }
-    .hero h1 {
-      font-size: 2.5rem;
-      margin-bottom: 0.5rem;
-    }
-    .hero p {
-      color: var(--color-soft-gray);
-      margin-bottom: 1.5rem;
-    }
-    .btn-primary {
-      background: var(--color-neural-blue);
-      color: var(--color-white);
-      padding: 0.75rem 1.5rem;
-      border-radius: 0.375rem;
-      text-decoration: none;
-      transition: opacity 0.2s;
-    }
-  </style>
-
-  <!-- Deferred stylesheet -->
-  <link rel="stylesheet" href="styles.css" media="print" onload="this.media='all'" />
-  <noscript><link rel="stylesheet" href="styles.css" /></noscript>
+  <meta name="description" content="Join the Javlin waitlist and start receiving daily Sparks to help you remember what matters.">
+  <meta property="og:title" content="Join the Javlin Waitlist – Remember What Matters">
+  <meta property="og:description" content="Join the Javlin waitlist and start receiving daily Sparks to help you remember what matters.">
+  <meta property="og:image" content="/assets/social/og-image.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <a href="#main" class="skip-link">Skip to main content</a>
-  <header class="hero" id="main">
-    <h1>Javlin is your signal.</h1>
-    <p>Get your first AI memory prompt in 24 hours.</p>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="container">
+    <h1>Remember What Matters</h1>
+    <p>Join the waitlist to receive daily Sparks that help you retain what truly matters.</p>
     <a href="#waitlist" class="btn-primary">Join the waitlist</a>
   </header>
 
-  <main class="features container">
-    <div class="feature-card">
-      <img src="/assets/icons/ICON_SIGNAL.svg" alt="" aria-label="Signal over noise" />
-      <p>Cut through the clutter</p>
-    </div>
-    <div class="feature-card">
-      <img src="/assets/icons/ICON_IDENTITY.svg" alt="" aria-label="Identity-based sparks" />
-      <p>Personalized flashcards</p>
-    </div>
-    <div class="feature-card">
-      <img src="/assets/icons/ICON_SPACED.svg" alt="" aria-label="Spaced-repetition reminders" />
-      <p>Automatic review reminders</p>
-    </div>
+  <main id="main">
+    <section class="features container">
+      <div class="feature-card">
+        <img src="/assets/icons/ICON_SIGNAL.svg" alt="Signal icon" aria-hidden="true">
+        <h3>Signal</h3>
+      </div>
+      <div class="feature-card">
+        <img src="/assets/icons/ICON_IDENTITY.svg" alt="Identity icon" aria-hidden="true">
+        <h3>Identity</h3>
+      </div>
+      <div class="feature-card">
+        <img src="/assets/icons/ICON_SPACED.svg" alt="Spaced Repetition icon" aria-hidden="true">
+        <h3>Spaced Repetition</h3>
+      </div>
+    </section>
+
+    <section id="waitlist" class="waitlist-form container">
+      <form id="waitlist-form" novalidate>
+        <label for="email">Email address</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          required
+          aria-required="true"
+          aria-describedby="email-error"
+        >
+        <p id="email-error" class="error-msg" aria-live="assertive" role="alert">
+          Please enter a valid email.
+        </p>
+
+        <button type="submit" class="btn-primary">
+          Join the waitlist
+        </button>
+
+        <p id="success-message" class="success-msg" aria-live="polite">
+          Thanks! Check your inbox—your first Spark arrives tomorrow.
+        </p>
+      </form>
+    </section>
   </main>
 
-  <section id="waitlist" class="waitlist-form container">
-    <!-- Starter Story Embed Snippet -->
-  </section>
-
-  <footer>
-    <a href="https://twitter.com/JavlinDev">Twitter</a> |
-    <a href="/privacy">Privacy Policy</a>
+  <footer class="container">
+    <ul class="footer-links">
+      <li><a href="https://twitter.com/JavlinDev" target="_blank" rel="noopener">Twitter</a></li>
+      <li><a href="/privacy">Privacy Policy</a></li>
+    </ul>
   </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('waitlist-form');
+      const emailInput = document.getElementById('email');
+      const errorMsg = document.getElementById('email-error');
+      const successMsg = document.getElementById('success-message');
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        errorMsg.classList.remove('visible');
+        successMsg.classList.remove('visible');
+
+        if (!emailInput.checkValidity()) {
+          errorMsg.classList.add('visible');
+          emailInput.focus();
+          return;
+        }
+
+        // TODO: wire up real submission (e.g. via fetch to your API endpoint)
+        successMsg.classList.add('visible');
+        form.reset();
+      });
+    });
+  </script>
 </body>
 </html>
