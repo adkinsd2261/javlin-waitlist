@@ -336,15 +336,3 @@ h3 { font-size: 1.5rem; }  /* 24px */
 8. Measure performance: Lighthouse LCP/FID within targets.
 9. Confirm analytics fires post-consent and privacy link is visible.
 
-````
-
-Now paste this entire block into your `CODEX.md`, save, and run:
-
-```bash
-git add CODEX.md
-git commit -m "🔒 Lock in complete CODEX spec v1.1"
-git push origin main
-````
-
-That makes the document copy-and-pasteable and properly formatted.
-
