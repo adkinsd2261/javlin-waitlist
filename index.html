@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- SEO & Social Meta -->
+  <title>Join the Javlin Waitlist – Remember What Matters</title>
+  <meta name="description" content="Join Javlin’s AI Memory Engine waitlist to get personalized spaced-repetition reminders." />
+  <meta property="og:title" content="Join the Javlin Waitlist – Remember What Matters" />
+  <meta property="og:description" content="Join Javlin’s AI Memory Engine waitlist to get personalized spaced-repetition reminders." />
+  <meta property="og:image" content="https://yourdomain.com/og-image.png" />
+
+  <!-- 4. Font Import & Application -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --font-sans: 'Inter','Helvetica Neue',Arial,sans-serif;
+    }
+    body {
+      font-family: var(--font-sans);
+    }
+  </style>
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <!-- Hero Section -->
+    <section id="hero">
+      <h1>Javlin is your signal.</h1>
+      <p>Get your first AI memory prompt in 24 hours.</p>
+      <a href="#waitlist" class="btn-primary">Join the Waitlist</a>
+    </section>
+  </header>
+
+  <main>
+    <!-- Features Section -->
+    <section id="features">
+      <div class="feature" tabindex="0">
+        <img src="ICON_SIGNAL.svg" alt="Signal icon" loading="lazy" />
+        <h3>Signal Clarity</h3>
+        <p>Cut through the noise with AI-curated memory sparks.</p>
+      </div>
+      <div class="feature" tabindex="0">
+        <img src="ICON_IDENTITY.svg" alt="Identity icon" loading="lazy" />
+        <h3>Identity-Powered</h3>
+        <p>Personalize reviews based on what matters to you.</p>
+      </div>
+      <div class="feature" tabindex="0">
+        <img src="ICON_SPACED.svg" alt="Spaced icon" loading="lazy" />
+        <h3>Spaced Mastery</h3>
+        <p>Retain knowledge longer with proven intervals.</p>
+      </div>
+    </section>
+
+    <!-- Waitlist Form Section -->
+    <section
+      id="waitlist"
+      class="waitlist-form"
+      aria-label="Join the Javlin waitlist"
+    >
+      <h2>Join the waitlist</h2>
+      <div id="form-message" role="alert" aria-live="assertive"></div>
+
+      <form id="waitlist-form" action="https://formspree.io/f/manjeqvv" method="POST" novalidate>
+        <label for="name">Name</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Your name"
+          required
+        />
+        <span class="error-message" id="error-name"></span>
+
+        <label for="email">Email address</label>
+        <input
+          type="email"
+          id="email"
+          name="_replyto"
+          placeholder="Your email"
+          required
+          class="js-validate-email"
+        />
+        <span class="error-message" id="error-email">Please enter a valid email.</span>
+
+        <button type="submit" class="btn-primary">Join the waitlist</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 Javlin. All rights reserved.
+  </footer>
+
+  <!-- Form Validation & Submission Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('waitlist-form');
+      const nameField  = form.querySelector('#name');
+      const emailField = form.querySelector('.js-validate-email');
+      const nameError  = form.querySelector('#error-name');
+      const emailError = form.querySelector('#error-email');
+      const msgDiv     = document.getElementById('form-message');
+
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        // clear previous
+        [nameError, emailError].forEach(el => el.textContent = '');
+        [nameField, emailField].forEach(f => f.classList.remove('invalid'));
+        msgDiv.textContent = '';
+
+        let hasError = false;
+        if (!nameField.value.trim()) {
+          nameError.textContent = 'Please enter your name.';
+          nameField.classList.add('invalid');
+          hasError = true;
+        }
+        const email = emailField.value.trim();
+        const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email || !pattern.test(email)) {
+          emailError.style.display = 'block';
+          emailField.classList.add('invalid');
+          hasError = true;
+        }
+        if (hasError) return;
+
+        form.querySelector('button').disabled = true;
+        try {
+          const res = await fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'Accept': 'application/json' }
+          });
+          if (res.ok) {
+            form.reset();
+            msgDiv.textContent = 'Thanks! You’re on the list.';
+          } else {
+            msgDiv.textContent = 'Oops! Something went wrong.';
+          }
+        } catch {
+          msgDiv.textContent = 'Oops! Something went wrong.';
+        } finally {
+          form.querySelector('button').disabled = false;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+

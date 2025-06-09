@@ -1,0 +1,99 @@
+# Javlin Legal Pre-Launch Checklist
+
+Before going live, ensure you’ve covered these essential legal and compliance tasks. Update and tick off each item as you complete it.
+
+---
+
+## 1. Corporate & Business Registration
+
+* [ ] **Incorporate Your Entity**
+  Register as an LLC, C-Corp, or equivalent in your jurisdiction.
+* [ ] **Obtain Business Licenses**
+  Verify any local or industry-specific licensing requirements.
+* [ ] **Register DBA/Trademark**
+  Secure your company and product names (“Javlin”) with a trademark office.
+
+---
+
+## 2. Terms & Policies
+
+* [ ] **Terms of Service (TOS)**
+  Draft and publish TOS governing user behavior, account termination, disclaimers, and liability limits.
+* [ ] **Privacy Policy**
+  Finalize the policy in `assets/privacy-policy-template.md` and make it accessible on your website.
+* [ ] **Cookie Policy & Consent Banner**
+  Ensure cookie banner is live and links to a detailed cookie policy.
+* [ ] **Data Processing Agreement (DPA)**
+  Prepare DPA for any B2B customers handling personal data.
+
+---
+
+## 3. Data Protection & Compliance
+
+* [ ] **GDPR Compliance**
+
+  * Provide user rights (access, rectification, erasure).
+  * Document breach notification procedures.
+  * Maintain records of processing activities.
+* [ ] **CCPA/CPRA Compliance**
+
+  * Enable opt-out of data sale.
+  * Offer “Do Not Sell My Personal Information” link.
+  * Provide rights-to-know and delete mechanisms.
+* [ ] **COPPA (if applicable)**
+  Determine if you collect data from minors under 13 and implement parental consent flows.
+
+---
+
+## 4. Intellectual Property & Content
+
+* [ ] **Copyright Notices**
+  Add © notices and year on your website and app.
+* [ ] **Open Source Licenses**
+  Audit and document licenses for all third-party libraries.
+* [ ] **User-Generated Content (UGC) Policy**
+  Define rights/permissions regarding content users submit (e.g., Sparks).
+
+---
+
+## 5. Payment & Financial Compliance
+
+* [ ] **Payment Processor Agreements**
+  Complete onboarding with Stripe, PayPal, or other gateways.
+* [ ] **Tax Registrations**
+  Register for sales tax/VAT if you’ll collect payments in various jurisdictions.
+* [ ] **Secure PCI Compliance**
+  Ensure your payment flow meets PCI-DSS standards (via your payment provider).
+
+---
+
+## 6. Security & Risk Management
+
+* [ ] **Cybersecurity Audit**
+  Conduct a third-party penetration test and vulnerability assessment.
+* [ ] **Business Insurance**
+  Obtain E\&O (Errors & Omissions) and Cyber Liability insurance.
+* [ ] **Incident Response Plan**
+  Finalize `RUNBOOK.md` with legal notification steps for data breaches.
+
+---
+
+## 7. Platform-Specific Requirements
+
+* [ ] **App Store & Play Store Compliance**
+  Review and comply with Apple’s and Google’s developer guidelines (privacy, permissions, in-app purchases).
+* [ ] **Accessibility Statement**
+  Publish an accessibility statement if required by law in your target markets.
+
+---
+
+## 8. Marketing & Communications
+
+* [ ] **Email Marketing Compliance**
+  Adhere to CAN-SPAM, CASL (Canada), and GDPR e-Privacy rules (double opt-in, unsubscribe link).
+* [ ] **Advertising Standards**
+  Ensure any claims (“AI-powered memory engine”) are substantiated and comply with FTC guidelines.
+
+---
+
+> *Complete this checklist and retain documentation for each item. Consult legal counsel where necessary.*

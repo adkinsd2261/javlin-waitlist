@@ -1,0 +1,215 @@
+# Javlin Code Scaffold
+
+Use this scaffold to jump straight into coding large, self-contained features. Copy each section into the corresponding file, and implementation will be mostly “plug and go.”
+
+---
+
+## 1. `src/apiClient.js`
+
+```js
+// src/apiClient.js
+import { API_BASE } from '@env'; // or process.env.API_BASE
+
+async function request(path, options = {}) {
+  const url = `${API_BASE}${path}`;
+  const headers = { 'Content-Type': 'application/json', ...options.headers };
+  const res = await fetch(url, { ...options, headers });
+  const data = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(data?.error || res.statusText);
+  return data;
+}
+
+export function signUpForWaitlist(email) {
+  return request('/waitlist', {
+    method: 'POST',
+    body: JSON.stringify({ email }),
+  });
+}
+
+export function login(email, password) {
+  return request('/auth/login', {
+    method: 'POST',
+    body: JSON.stringify({ email, password }),
+  });
+}
+
+export function fetchSparks(userId) {
+  return request(`/users/${userId}/sparks`);
+}
+
+export function createSparks(userId, content) {
+  return request(`/users/${userId}/sparks`, {
+    method: 'POST',
+    body: JSON.stringify({ content }),
+  });
+}
+```
+
+---
+
+## 2. `src/components/SparkCard.js`
+
+```jsx
+// src/components/SparkCard.js
+import React from 'react';
+import { View, Text, Button, StyleSheet } from 'react-native';
+
+export default function SparkCard({ spark, onEdit, onReject }) {
+  const pct = Math.round(spark.emotionalScore * 100);
+  return (
+    <View style={styles.card}>
+      <Text style={styles.question}>{spark.question}</Text>
+      <Text style={styles.answer}>{spark.answer}</Text>
+      <Text style={styles.badge}>❤️ {pct}%</Text>
+      <View style={styles.controls}>
+        <Button title="Edit" onPress={() => onEdit(spark)} />
+        <Button title="Reject" onPress={() => onReject(spark)} />
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  card: { padding: 16, backgroundColor: '#FAFAFA', borderRadius: 8, marginBottom: 12 },
+  question: { fontSize: 16, fontWeight: '600' },
+  answer: { marginTop: 8, fontSize: 14 },
+  badge: { position: 'absolute', top: 8, right: 8, fontSize: 12 },
+  controls: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 },
+});
+```
+
+---
+
+## 3. `src/components/TutorialOverlay.js`
+
+```jsx
+// src/components/TutorialOverlay.js
+import React, { useState } from 'react';
+import { Modal, View, Text, Button, StyleSheet } from 'react-native';
+
+const steps = [
+  'Swipe right ✅ for success, left ❌ for miss.',
+  'See the ❤️ badge? It shows how much this Spark resonated.',
+  'Use Edit or Reject to manage your Sparks before saving.',
+];
+
+export default function TutorialOverlay({ visible, onClose }) {
+  const [index, setIndex] = useState(0);
+  function next() {
+    if (index < steps.length - 1) setIndex(i => i + 1);
+    else onClose();
+  }
+  return (
+    <Modal visible={visible} transparent>
+      <View style={styles.backdrop}>
+        <View style={styles.container}>
+          <Text style={styles.text}>{steps[index]}</Text>
+          <Button title={index < steps.length - 1 ? 'Next' : 'Done'} onPress={next} />
+          <Button title="Skip" onPress={onClose} />
+        </View>
+      </View>
+    </Modal>
+  );
+}
+
+const styles = StyleSheet.create({
+  backdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' },
+  container: { backgroundColor: '#FFF', padding: 24, borderRadius: 8, width: '80%' },
+  text: { marginBottom: 16, fontSize: 16 },
+});
+```
+
+---
+
+## 4. `src/screens/LandingPage.js`
+
+```jsx
+// src/screens/LandingPage.js
+import React, { useState } from 'react';
+import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
+import { signUpForWaitlist } from '../apiClient';
+
+export default function LandingPage() {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState('');
+
+  async function onSubmit() {
+    try {
+      await signUpForWaitlist(email);
+      setStatus('success');
+    } catch (e) {
+      setStatus('error');
+    }
+  }
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.heading}>Don’t lose yourself in the noise. Javlin is the signal.</Text>
+      <TextInput
+        placeholder="you@example.com"
+        style={styles.input}
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+      />
+      <Button title="Join the waitlist" onPress={onSubmit} />
+      {status === 'success' && <Text style={styles.success}>Thanks! Check your inbox.</Text>}
+      {status === 'error' && <Text style={styles.error}>Please enter a valid email.</Text>}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { padding: 24, alignItems: 'center' },
+  heading: { fontSize: 24, fontWeight: '600', marginBottom: 16, textAlign: 'center' },
+  input: { width: '100%', padding: 12, borderColor: '#CCC', borderWidth: 1, borderRadius: 4, marginBottom: 12 },
+  success: { color: 'green', marginTop: 12 },
+  error: { color: 'red', marginTop: 12 },
+});
+```
+
+---
+
+## 5. `src/screens/ReviewScreen.js`
+
+```jsx
+// src/screens/ReviewScreen.js
+import React, { useEffect, useState } from 'react';
+import { View, ActivityIndicator, FlatList } from 'react-native';
+import { fetchSparks } from '../apiClient';
+import SparkCard from '../components/SparkCard';
+
+export default function ReviewScreen({ userId }) {
+  const [sparks, setSparks] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchSparks(userId).then(data => {
+      setSparks(data.sparks);
+      setLoading(false);
+    }).catch(() => setLoading(false));
+  }, []);
+
+  if (loading) return <ActivityIndicator />;
+
+  return (
+    <FlatList
+      data={sparks}
+      keyExtractor={item => item.id}
+      renderItem={({ item }) => <SparkCard spark={item} onEdit={()=>{}} onReject={()=>{}} />}
+    />
+  );
+}
+```
+
+---
+
+## 6. Comments & Next Steps
+
+* Copy each scaffold to your codebase before development.
+* Once all files exist, you can focus on wiring logic and styles instead of file creation.
+* Use this as your starting point for Week 1 and beyond.
+
+---
+
+*Place this file as `CODE_SCAFFOLD.md` at the project root. Refer to it for large code chunks to paste directly.*

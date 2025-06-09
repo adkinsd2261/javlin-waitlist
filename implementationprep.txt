@@ -1,0 +1,110 @@
+# Javlin Development Pre-Implementation Checklist
+
+Use this checklist to ensure your project is fully configured and ready for coding. Refer back to this document before starting each week of development.
+
+---
+
+## 1. Dependencies & Environment
+
+* [ ] **Environment Variable Loader**
+
+  * Install and configure `react-native-dotenv` or `react-native-config` for `.env` support.
+* [ ] **HTTP Client**
+
+  * Decide between built-in `fetch` or install `axios` for API calls.
+* [ ] **Swipeable Cards**
+
+  * Install libraries like `react-native-gesture-handler` and `react-native-swipe-list-view` (or equivalent).
+* [ ] **Navigation**
+
+  * Set up React Navigation or your preferred routing solution.
+* [ ] **State Management**
+
+  * Configure Context API, Redux, or MobX as needed.
+* [ ] **Analytics & Monitoring**
+
+  * Install Mixpanel, Sentry, or other SDKs and configure with your keys.
+
+---
+
+## 2. Code Quality & Testing
+
+* [ ] **Linters & Formatters**
+
+  * ESLint + Prettier configured
+  * Husky + commitlint for commit message hygiene
+* [ ] **Testing**
+
+  * Jest setup for unit and snapshot tests
+  * React Native Testing Library for component tests
+* [ ] **Accessibility Automation**
+
+  * Integrate `axe-core` CLI in CI for WCAG AA checks
+
+---
+
+## 3. CI/CD Pipeline
+
+* [ ] **GitHub Actions**
+
+  * Workflow to check out code, install deps, run lint/tests, and build
+* [ ] **Mock Server Smoke-Test**
+
+  * CI step to run `npm run mock-server -- --check` and fail if errors
+
+---
+
+## 4. Storybook & Component Library (Recommended)
+
+* [ ] **Initialize Storybook**
+
+  ```bash
+  npx -p @storybook/cli sb init
+  ```
+* [ ] **Create Stories** for UI components:
+
+  * Waitlist form
+  * Consent banner
+  * Spark card with controls
+  * Testimonials carousel
+
+---
+
+## 5. Assets & Fonts
+
+* [ ] **Placeholders**
+
+  * Add `assets/design/placeholder.png` for any missing mockups
+* [ ] **Logos & Icons**
+
+  * Ensure `assets/logo/` contains all required logo variations
+* [ ] **Fonts**
+
+  * Confirm Google Fonts preload in `index.html` or local font files for Inter weights 400/500/600
+
+---
+
+## 6. Documentation & References
+
+* [ ] **Implementation Guide**: `IMPLEMENTATION_GUIDE.md`
+* [ ] **Task Tracker**: `TASKS.md`
+* [ ] **Brand Spec**: `BRAND_BIBLE.md`
+* [ ] **Product Spec**: `PRODUCT_BIBLE.md`
+* [ ] **Page Spec**: `CODEX.md`
+* [ ] **Asset Inventory**: `ASSET_INVENTORY.md`
+
+---
+
+## 7. Final Sanity Check
+
+* [ ] **Fresh Clone Test**
+
+  1. Clone the repo to a new folder
+  2. Follow `README.md` steps to install deps
+  3. Run dev scripts (`mock-server`, `dev:android`, `dev:ios`)
+  4. Run linters and tests
+  5. Ensure no missing-file or missing-dependency errors
+
+---
+
+> Once all boxes are checked, you’re fully prepared to begin feature development with minimal friction and maximum efficiency.

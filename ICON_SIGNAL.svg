@@ -1,0 +1,5 @@
+<!-- Save as ICON_SIGNAL.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 64 64">
+  <circle cx="32" cy="32" r="6" fill="#5151FF"/>
+  <path stroke="#5151FF" stroke-width="4" d="M32 14v-4M32 54v4M14 32h-4M54 32h4M19.03 19.03l-2.83-2.83M47.8 47.8l2.83 2.83M19.03 44.97l-2.83 2.83M47.8 16.2l2.83-2.83"/>
+</svg>

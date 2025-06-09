@@ -1,0 +1,9 @@
+<!-- Save as ICON_IDENTITY.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 64 64">
+  <!-- user circle -->
+  <circle cx="32" cy="24" r="12" fill="#5151FF"/>
+  <!-- shoulders -->
+  <path fill="#5151FF" d="M20 50c0-6.627 5.373-12 12-12s12 5.373 12 12H20z"/>
+  <!-- spark -->
+  <path stroke="#FAFAFA" stroke-width="4" d="M32 8l4 12h-8l4-12zM32 56l4-12h-8l4 12z"/>
+</svg>

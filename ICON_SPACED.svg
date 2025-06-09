@@ -1,0 +1,6 @@
+<!-- Save as ICON_SPACED.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 64 64">
+  <circle cx="32" cy="32" r="20" stroke="#5151FF" stroke-width="4"/>
+  <path stroke="#5151FF" stroke-width="4" d="M52 32a20 20 0 0 0-31.2-17.3L16 20"/>
+  <path fill="#5151FF" d="M17 20l-4-4 4-4v8z"/>
+</svg>

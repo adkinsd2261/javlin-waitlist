@@ -22,6 +22,10 @@
   * Dark‑mode note
 
 ## 1. Brand & Styles
+> **See also:**  
+> - [DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md)  
+> - [LAUNCH.md](./LAUNCH.md)
+
 
 * **Font stack:**
 

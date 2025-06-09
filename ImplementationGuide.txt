@@ -1,0 +1,121 @@
+# Javlin Implementation Pre-Flight Guide
+
+Use this guide to ensure your environment and assets are fully configured before diving into feature development. Place it at the project root and refer back when kicking off each sprint.
+
+---
+
+## 1. Codebase & Environment Setup
+
+* [ ] **Clone & Branch**
+
+  ```bash
+  git clone git@github.com:your-org/javlin-waitlist.git
+  cd javlin-waitlist
+  git checkout -b feature/implementation
+  ```
+* [ ] **Install Dependencies**
+
+  ```bash
+  npm install       # or yarn install
+  expo install      # if using Expo
+  ```
+* [ ] **Environment Variables**
+
+  * Create a `.env` (ignored in `.gitignore`) with:
+
+    ```ini
+    API_BASE=https://api.your-domain.com/v1
+    FIREBASE_API_KEY=YOUR_KEY
+    OPENAI_API_KEY=YOUR_KEY
+    MIXPANEL_TOKEN=YOUR_TOKEN
+    ```
+* [ ] **Dev Scripts Verification**
+
+  ```bash
+  npm run mock-server   # start API stub
+  npm run dev:android   # launch Expo on Android
+  npm run dev:ios       # launch Expo on iOS (macOS only)
+  ```
+
+---
+
+## 2. CI/CD & Testing Scaffolding
+
+* [ ] **GitHub Actions**
+
+  * Ensure `.github/workflows/` exists for build, test, deploy jobs.
+* [ ] **Linters & Formatters**
+
+  * ESLint & Prettier configured
+  * Stylelint (or Tailwind checks) for styles
+  * Commit-lint for commit message consistency
+* [ ] **Accessibility Tests**
+
+  * Add `axe-core` to CI pipeline for WCAG checks
+* [ ] **Unit & Snapshot Tests**
+
+  * Jest + React Native Testing Library for components
+
+---
+
+## 3. Component Library & Storybook (Recommended)
+
+* [ ] **Initialize Storybook**
+
+  ```bash
+  npx -p @storybook/cli sb init
+  ```
+* [ ] **Create stories** for each UI snippet in `CODEX.md`:
+
+  * Waitlist form
+  * Consent banner
+  * Spark card with controls and badge
+  * Testimonials carousel
+
+---
+
+## 4. Analytics & Monitoring Setup
+
+* [ ] **Analytics**
+
+  * Register Mixpanel/GA project and note token/ID
+  * Add deferred analytics loader snippet to `index.html`
+* [ ] **Error Monitoring**
+
+  * Integrate Sentry (or Datadog) DSN in env
+  * Initialize in app bootstrap code
+
+---
+
+## 5. Asset Placeholders & Fonts
+
+* [ ] **Asset Placeholders**
+
+  * Add `assets/design/placeholder.png` for any missing mockups
+* [ ] **Logo & Icons**
+
+  * Place logos in `assets/logo/` as specified in `ASSET_INVENTORY.md`
+* [ ] **Fonts**
+
+  * Ensure Google Fonts preload links in `index.html` or local files for Inter (400/500/600)
+
+---
+
+## 6. Documentation & Spec References
+
+* [ ] **Brand & Product Docs**
+
+  * `BRAND_BIBLE.md` v1.1 in project root
+  * `PRODUCT_BIBLE.md` v1.2 in project root
+  * `CODEX.md` v1.2.2 in project root
+* [ ] **Task Tracker**
+
+  * `TASKS.md` to track implementation progress
+* [ ] **Asset Inventory**
+
+  * `ASSET_INVENTORY.md` listing all design & policy assets
+
+---
+
+> **Once all items are ✅, you’re ready to begin Week 1 of development.**
+> Copy this doc into your workflow and reference it daily to avoid blockers.

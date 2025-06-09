@@ -1,0 +1,139 @@
+:root {
+  --jet-black:   #131313;
+  --white:       #FAFAFA;
+  --neural-blue: #5151FF;
+  --deep-night:  #0F0F33;
+  --soft-gray:   #EAEAEA;
+  --font-sans:   'Inter','Helvetica Neue',Arial,sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* 2. Global focus outline & offset */
+:focus {
+  outline: 2px solid var(--neural-blue);
+  outline-offset: 2px;
+}
+
+/* Base styles */
+body {
+  font-family: var(--font-sans);
+  color: var(--jet-black);
+  background: var(--white);
+  line-height: 1.6;
+}
+
+/* Hero Section */
+#hero {
+  text-align: center;
+  padding: 80px 20px;
+}
+#hero h1 {
+  font-size: 3rem;
+  font-weight: 600;
+}
+#hero p {
+  margin: 20px 0;
+  font-size: 1.125rem;
+  color: var(--soft-gray);
+}
+
+/* CTA Button */
+.btn-primary {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  background-color: var(--neural-blue);
+  color: var(--white);
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Features Section */
+#features {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+  padding: 60px 20px;
+}
+.feature {
+  text-align: center;
+  max-width: 240px;
+  transition: transform 0.2s ease;
+}
+.feature img {
+  max-width: 64px;
+  height: auto;
+}
+/* Hover & focus state */
+.feature:hover,
+.feature:focus {
+  transform: scale(1.05);
+  outline: 2px solid var(--neural-blue);
+  outline-offset: 2px;
+}
+
+/* Waitlist Form Section */
+.waitlist-form {
+  background: #FAFAFA;
+  color: #000;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+.waitlist-form h2 {
+  margin-bottom: 1rem;
+}
+.waitlist-form label {
+  display: block;
+  margin: 0 auto 4px;
+  max-width: 400px;
+  text-align: left;
+  font-weight: 500;
+}
+.waitlist-form input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--soft-gray);
+  border-radius: 6px;
+}
+.waitlist-form input.invalid {
+  border-color: #E53E3E;
+}
+.error-message {
+  color: #E53E3E;
+  font-size: 0.875rem;
+  margin-top: 4px;
+  display: block;
+}
+
+/* Footer Styling */
+footer {
+  background-color: var(--soft-gray);
+  color: #333333;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Responsive Hero Spacing */
+@media screen and (max-width: 480px) {
+  #hero {
+    padding-top: 4rem;
+    padding-bottom: 2rem;
+  }
+  #hero h1 {
+    font-size: 2rem;
+  }
+}
+
+
+
+
+
