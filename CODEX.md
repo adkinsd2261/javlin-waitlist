@@ -1,16 +1,17 @@
 # Javlin Waitlist CODEX
 
-**Version:** 1.1 (2025-06-08)
+**Version:** 1.2 (2025-06-09)
 **Changelog:**
 
 * v1.0: Initial spec
 * v1.1: Added Maintenance & QA, error animations, skip link, dark-mode note, phased roadmap
+* v1.2: Enhanced versioning policy, form reference, font-display swap, consent gating, roadmap highlighting
 
 **Versioning Policy:**
 
-* **Major version (vX.0):** Increment when making breaking structural changes to the spec (e.g., new sections, reorganizations).
-* **Minor version (vX.Y):** Increment for non-breaking enhancements, bug fixes, or clarifications within existing sections.
-* **Bump the Version & Date:** Update the `**Version:**` and date at the top of this file whenever you release a new version.
+* **Major version (vX.0):** Increment when making breaking structural changes.
+* **Minor version (vX.Y):** Increment for non-breaking enhancements or clarifications.
+* **Update the Version & Date** at the top whenever you release a new version.
 
 ---
 
@@ -46,7 +47,7 @@
    * Three `<div class="feature-card">` each with `<img>` + `<p>`
 3. **Waitlist Form**
 
-   * `<section id="waitlist" class="waitlist-form container">` contains our native `<form>` markup per §2
+   * `<section id="waitlist" class="waitlist-form container">` contains our native `<form>` markup (email input, submit button) with inline validation and ARIA messaging (see §7).
 4. **Footer**
 
    * `<footer>` with minimal links (Twitter, Privacy Policy)
@@ -178,7 +179,7 @@ h3 { font-size: 1.5rem; }  /* 24px */
 
 ```html
 <label for="email">Email address</label>
-<input id="email" type="email" required>
+<input id="email" name="email" type="email" placeholder="you@example.com" required>
 <p class="error-msg" id="email-error" aria-live="assertive"></p>
 <p class="success-msg" id="success-msg" aria-live="polite"></p>
 ```
@@ -249,7 +250,7 @@ h3 { font-size: 1.5rem; }  /* 24px */
   * `/assets/icons/ICON_SIGNAL.svg`
   * `/assets/icons/ICON_IDENTITY.svg`
   * `/assets/icons/ICON_SPACED.svg`
-* **Image formats & sizing:** SVG icons (<10 KB), photos as WebP (max 800 px)
+* **Image formats & sizing:** SVG icons (<10 KB), photos as WebP (max 800 px)
 * **Lazy-load images:**
 
 ```html
@@ -260,8 +261,9 @@ h3 { font-size: 1.5rem; }  /* 24px */
 
 ```html
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
 ```
 
 * **Critical vs. deferred CSS:**
@@ -293,14 +295,14 @@ h3 { font-size: 1.5rem; }  /* 24px */
 * **Analytics snippet placeholder:**
 
 ```html
-<!-- INSERT analytics script here -->
+<!-- INSERT analytics script here, load after consent banner acceptance -->
 ```
 
 * **Privacy Policy link:** footer link text “Privacy Policy” → `/privacy`
 * **Consent banner basics:**
 
 ```html
-<!-- GDPR banner: “We use cookies to improve your experience.” [Accept] -->
+<!-- GDPR consent banner: display banner, block analytics until Accept clicked -->
 ```
 
 ---
@@ -323,41 +325,39 @@ h3 { font-size: 1.5rem; }  /* 24px */
 
 ### 13.1 API Endpoints (v1)
 
-* **Versioning:** All routes prefixed with `/v1` (e.g. `POST /v1/waitlist`).
-* **OpenAPI Schema:** Document each endpoint’s request/response schemas and error codes.
+* **Versioning:** All routes prefixed with `/v1`
+* **OpenAPI Schema:** Document schemas and codes.
 * **Endpoints:**
 
-  * `POST /v1/waitlist`
-
-    * Body: `{ email: string }` → `201`, `400`, `429`
+  * `POST /v1/waitlist` → `201`, `400`, `429`
   * `GET /v1/users/{id}/sparks` → `200`, `401`
-  * `POST /v1/users/{id}/sparks` → `{ content, source }` → `201`, `400`, `401`
-  * `PATCH /v1/users/{id}/sparks/{sparkId}` → partial update → `200`, `400`, `404`, `401`
+  * `POST /v1/users/{id}/sparks` → `201`, `400`, `401`
+  * `PATCH /v1/users/{id}/sparks/{sparkId}` → `200`, `400`, `404`, `401`
   * `DELETE /v1/users/{id}/sparks/{sparkId}` → `204`, `404`, `401`
   * Auth: `POST /v1/auth/signup`, `POST /v1/auth/login`, `POST /v1/auth/refresh`
 
 ### 13.2 Data Model & Storage
 
-* **User**: `id` (PK), `email` (unique, indexed), `created_at`, `preferences` (typed JSON)
-* **Spark**: `id` (PK), `user_id` (FK → User, cascade delete), `content`, `source`, `created_at`
-* **Review**: `id` (PK), `spark_id` (FK → Spark, cascade delete), `due_date` (indexed), `interval`, `easiness_factor`
+* **User**: `id` (PK), `email` (unique, indexed), `created_at`, `preferences`
+* **Spark**: `id` (PK), `user_id` (FK, cascade delete), `content`, `source`, `created_at`
+* **Review**: `id` (PK), `spark_id` (FK, cascade delete), `due_date` (indexed), `interval`, `easiness_factor`
 
 ### 13.3 Decoupled AI Pipeline
 
-1. Ingestion Service → queue
+1. Ingestion → queue
 2. Spark Generator → AI model → queue
 3. Persistence Worker → DB + schedule review
-4. Retries (3×) + dead-letter + metrics/logging
+4. Retries + dead-letter + metrics
 
 ### 13.4 Scheduler & Notifications
 
-* Timezone-aware midnight cron → user timezone
-* Email via SendGrid/SES with retries/dead-letter
-* Push opt-in + FCM
+* Timezone-aware midnight cron
+* Email via SendGrid/SES with retries
+* Push opt-in via FCM
 
 ### 13.5 Authentication & Security
 
-* JWT 15m/30d with rotation
+* JWT 15m/30d rotation
 * CSRF (SameSite + tokens)
 * Rate-limits (100/hr IP)
 * Audit logs
@@ -395,7 +395,7 @@ h3 { font-size: 1.5rem; }  /* 24px */
 
 ### 14.6 Performance Budgets
 
-* CSS/JS ≤150 KB, images ≤200 KB, Lighthouse CI
+* CSS/JS ≤150 KB, images ≤200 KB, Lighthouse CI
 
 ### 14.7 Legal & Compliance
 
@@ -403,7 +403,7 @@ h3 { font-size: 1.5rem; }  /* 24px */
 
 ### 14.8 Developer Experience
 
-* Commit `✨ feat(scope): desc`, branch rules, PR checklist
+* Commit conventions, branch rules, PR checklist
 
 ### 14.9 SEO Enhancements
 
@@ -413,8 +413,9 @@ h3 { font-size: 1.5rem; }  /* 24px */
 
 ## 15. Roadmap & Phasing
 
-**Phase 1 (MVP):** Sections 1–7, 8–12, 13.1–13.2, 13.5, core 13.6, 14.4–14.7, 14.8–14.9
-**Phase 2 (Post-Launch):** Sections 13.3–13.4, 14.1–14.3, advanced dashboards
+**🏁 Phase 1 (MVP):**  Sections 1–7, 8–12, 13.1–13.2, 13.5, core 13.6, 14.4–14.7, 14.8–14.9
+**Phase 2 (Post-Launch):**  Sections 13.3–13.4, 14.1–14.3, advanced dashboards
+
 
 
 
