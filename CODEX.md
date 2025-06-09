@@ -336,3 +336,196 @@ h3 { font-size: 1.5rem; }  /* 24px */
 8. Measure performance: Lighthouse LCP/FID within targets.
 9. Confirm analytics fires post-consent and privacy link is visible.
 
+---
+
+## 13. Backend Architecture & Services
+
+### 13.1 API Endpoints (v1)
+
+* **Versioning:** All routes prefixed with `/v1` (e.g. `POST /v1/waitlist`).
+* **OpenAPI Schema:** Define request and response bodies, query parameters, headers, and error codes for each endpoint in an OpenAPI 3.0 document.
+* **Endpoints:**
+
+  * **POST /v1/waitlist**
+
+    * Body schema: `{ email: string }`
+    * Responses: `201 Created`, `400 Bad Request`, `429 Too Many Requests`
+    * Rate-limit: 100 requests/hour per IP.
+  * **GET /v1/users/{id}/sparks**
+
+    * Responses: `200 OK` with list of Sparks, `401 Unauthorized`
+  * **POST /v1/users/{id}/sparks**
+
+    * Body schema: `{ content: string, source: enum }`
+    * Responses: `201 Created`, `400 Bad Request`, `401 Unauthorized`
+  * **PATCH /v1/users/{id}/sparks/{sparkId}**
+
+    * Body schema: partial Spark update
+    * Responses: `200 OK`, `400`, `404 Not Found`, `401`
+  * **DELETE /v1/users/{id}/sparks/{sparkId}**
+
+    * Responses: `204 No Content`, `404`, `401`
+  * **Auth:**
+
+    * `POST /v1/auth/signup`
+    * `POST /v1/auth/login`
+    * `POST /v1/auth/refresh`
+
+### 13.2 Data Model & Storage
+
+* **User**
+
+  * `id` (UUID, PK), `email` (unique, indexed), `created_at` (timestamp), `preferences` (JSON with typed keys).
+  * Constraints: email unique.
+* **Spark**
+
+  * `id` (UUID, PK), `user_id` (UUID, FK ON DELETE CASCADE), `content` (text), `source` (enum), `created_at` (timestamp).
+  * Index on `user_id` and composite unique on (`user_id`, `source`, `created_at`).
+* **Review**
+
+  * `id` (UUID, PK), `spark_id` (UUID, FK ON DELETE CASCADE), `due_date` (date, indexed), `interval` (integer), `easiness_factor` (float).
+  * Index on `due_date` for scheduling.
+
+### 13.3 Decoupled AI Processing Pipeline
+
+1. **Ingestion Service**
+
+   * Receives inputs on `/v1/ingest`, publishes messages to queue (e.g. SQS, Kafka).
+2. **Spark Generator**
+
+   * Subscribes to queue, invokes AI model, publishes generated Spark to a secondary queue.
+3. **Persistence Worker**
+
+   * Subscribes to Spark queue, upserts Spark to DB, schedules initial Review.
+4. **Reliability:**
+
+   * Retry policy: 3 retries with exponential backoff.
+   * Dead-letter queue for failures.
+   * Metrics: processed count, error rate, latency histograms.
+
+### 13.4 Scheduler & Notifications
+
+* **Timezone-Aware Jobs:**
+
+  * Cron triggers at midnight UTC, compute each user’s local reset based on `preferences.timezone`.
+* **Email Delivery:**
+
+  * Use SendGrid/SES with retry (3 attempts) and dead-letter logs.
+* **Push Notifications:**
+
+  * Opt-in flag in `preferences.notifications.push`.
+  * Use FCM, record consent timestamp.
+
+### 13.5 Authentication & Security
+
+* **JWT Strategy:**
+
+  * Access token 15m expiry, Refresh token 30d expiry, rotation on use.
+* **CSRF Protection:**
+
+  * SameSite=strict cookies and double-submit CSRF tokens for state‑changing routes.
+* **Rate Limiting/Mitigation:**
+
+  * Apply at API gateway: 100 req/hr per IP for public endpoints.
+* **Audit Logging:**
+
+  * Log auth events (signup, login, refresh, logout) with user ID, timestamp, IP.
+
+### 13.6 DevOps, CI/CD & Monitoring
+
+* **CI/CD Gates:**
+
+  * Unit test coverage ≥80%, integration coverage ≥50%. Fail build if unmet.
+* **Health Endpoint:**
+
+  * `/v1/health` returns JSON status of DB, queue, AI service.
+* **SLOs/SLIs:**
+
+  * 99.9% uptime, p95 latency <200ms, error rate <1%.
+* **Error Tracking:**
+
+  * Sentry integration for unhandled exceptions.
+* **Performance Dashboards:**
+
+  * Datadog or Grafana dashboards for request rates, latencies, queue depth.
+
+---
+
+## 14. Extended Considerations
+
+### 14.1 Dark Mode & Theming
+
+* Support user preference via CSS media query:
+
+  ```css
+  @media (prefers-color-scheme: dark) { /* dark theme overrides */ }
+  ```
+* Define `--color-*` tokens for both light and dark palettes.
+* Provide a UI toggle to manually switch themes and persist in `preferences.theme`.
+
+### 14.2 Internationalization (i18n)
+
+* Use locale file structure: `/i18n/{lang}.json` with key-value pairs.
+* Format dates/numbers via `Intl.DateTimeFormat` and `Intl.NumberFormat`.
+* Default locale derived from browser or `preferences.locale`.
+
+### 14.3 Progressive Web App (PWA)
+
+* Add `manifest.json` with `name`, `icons`, `start_url`, `display`.
+* Implement service worker (`sw.js`) to cache critical assets and offline fallback.
+* Define cache strategies (stale-while-revalidate for CSS/JS, cache-first for icons).
+
+### 14.4 Testing & QA Standards
+
+* E2E tests with Cypress or Playwright; store tests in `/tests/e2e`.
+* Use naming conventions: `*.spec.ts` for tests, group by feature.
+* CI runs tests on PRs; block merges on failures.
+
+### 14.5 Security & HTTP Headers
+
+* Content Security Policy (CSP):
+
+  ```html
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline';">
+  ```
+* Enforce HSTS, X-Frame-Options, Referrer-Policy:
+
+  ```http
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Frame-Options: DENY
+  Referrer-Policy: no-referrer-when-downgrade
+  ```
+
+### 14.6 Performance Budgets
+
+* Limit CSS/JS bundles to ≤150 KB each.
+* Image payload budget ≤200 KB per page.
+* Monitor via Lighthouse CI in pipeline; fail if scores drop below 90/90/90.
+
+### 14.7 Legal & Compliance
+
+* Data retention: purge waitlist emails after 60 days if unsubscribed.
+* GDPR/CCPA notes: outline data export/deletion endpoints.
+* Privacy policy review every 6 months.
+
+### 14.8 Developer Experience
+
+* Commit message convention: `type(scope): description` with emoji prefix (e.g., `✨ feat(api): add signup endpoint`).
+* Branch naming: `feature/xyz`, `bugfix/abc`, `hotfix/123`.
+* PR Checklist: description, linked issue, tests added, review required.
+
+### 14.9 SEO Enhancements
+
+* Generate and publish `sitemap.xml` at root, update on deploy.
+* Include `robots.txt`:
+
+  ```txt
+  User-agent: *
+  Disallow:
+  Sitemap: https://waitlist.javlin.ai/sitemap.xml
+  ```
+* Use `rel="next"`/`rel="prev"` for paginated future pages.
+
+---
+
+
