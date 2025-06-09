@@ -526,6 +526,30 @@ h3 { font-size: 1.5rem; }  /* 24px */
   ```
 * Use `rel="next"`/`rel="prev"` for paginated future pages.
 
----
+## 15. Roadmap & Phasing
+
+To launch quickly and scalably, we categorize CODEX sections into two phases:
+
+**Phase 1 (MVP Launch):**
+- Sections 1–7: Brand & Styles, Layout, Sizing, Radii, Button States, Grid, Accessibility  
+- Sections 8–12: SEO & Meta, Assets & Performance, Copy & Tone, Analytics & Privacy, Maintenance & QA  
+- Section 13.1–13.2: API Endpoints v1, Data Model & Storage  
+- Section 13.5: Authentication & Security  
+- Section 13.6 (core): CI/CD gates, health endpoint, Sentry integration, basic metrics  
+- Section 14.4: Core E2E Testing & QA naming conventions  
+- Section 14.5: CSP, HSTS, X-Frame-Options, Referrer-Policy  
+- Section 14.6 (core budgets): JS/CSS ≤150 KB, image ≤200 KB, Lighthouse CI thresholds  
+- Section 14.7: Data retention & GDPR/CCPA stubs  
+- Section 14.8: Git & PR conventions, branch naming rules  
+- Section 14.9: sitemap.xml, robots.txt stub  
+
+**Phase 2 (Post-Launch Enhancements):**
+- Section 13.3: Decoupled AI Pipeline (queueing, retries, DLQ, metrics)  
+- Section 13.4: Timezone-aware scheduler, push notifications opt-in  
+- Section 14.1: Dark Mode & Theming UI toggle  
+- Section 14.2: Internationalization (i18n) support  
+- Section 14.3: Progressive Web App (manifest, service worker, offline)  
+- Section 14.6 (advanced dashboards): detailed performance budgets and dashboards  
+
 
 
