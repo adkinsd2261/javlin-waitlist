@@ -1,92 +1,77 @@
 # Javlin Waitlist CODEX
 
-**Version:** 1.1 (2025-06-08)
-**Changelog:**
-
-* v1.0: Initial spec
-* v1.1: Added Maintenance & QA, error animations, skip link, dark-mode note
+**Version:** 1.1 (2025-06-08)  
+**Changelog:**  
+- v1.0: Initial spec  
+- v1.1: Added Maintenance & QA, error animations, skip link, dark-mode note, backend architecture, extended considerations, roadmap & phasing
 
 ---
 
 ## 1. Brand & Styles
 
-* **Font Stack**
-
-  * Primary: `Inter` (weights 400, 500, 600)
-  * Fallbacks: `Helvetica Neue`, `Arial`, `sans-serif`
-* **Color Palette**
-
-  * Jet Black: `#131313`
-  * White: `#FAFAFA`
-  * Neural Blue: `#5151FF`
-  * Soft Gray: `#EAEAEA`
+* **Font Stack**  
+  * Primary: `Inter` (weights 400, 500, 600)  
+  * Fallbacks: `Helvetica Neue`, `Arial`, `sans-serif`  
+* **Color Palette**  
+  * Jet Black: `#131313`  
+  * White: `#FAFAFA`  
+  * Neural Blue: `#5151FF`  
+  * Deep Night: `#0F0F33`  
+  * Soft Gray: `#EAEAEA`  
 
 ---
 
 ## 2. Layout & Structure
 
-1. **Hero**
-
-   * `<header>` wrapper
-   * Contains, in order:
-
-     1. `<h1>` headline
-     2. `<p>` subhead
-     3. `<a>` CTA linking to `#waitlist`
-2. **Features**
-
-   * `<main>` section
-   * Three `<div class="feature-card">` each with:
-
-     * `<img>` for icon
-     * `<p>` for label
-3. **Waitlist Form**
-
-   * `<section id="waitlist" class="waitlist-form">` wraps the Starter Story embed
-4. **Footer**
-
-   * `<footer>` with minimal links (Twitter, Privacy Policy)
+1. **Hero**  
+   * `<header id="main" class="hero">` wrapper  
+   * Contains, in order:  
+     1. `<h1>` headline  
+     2. `<p>` subhead  
+     3. `<a class="btn-primary">` CTA linking to `#waitlist`  
+2. **Features**  
+   * `<main class="features container">`  
+   * Three `<div class="feature-card">` each with:  
+     * `<img>` for icon + `aria-label`  
+     * `<p>` for label  
+3. **Waitlist Form**  
+   * `<section id="waitlist" class="waitlist-form container">` contains our native `<form>` markup (see §2.3)  
+4. **Footer**  
+   * `<footer>` with minimal links (Twitter, Privacy Policy)  
 
 ---
 
 ## 3. Sizing & Spacing Scale
 
-* **Base font size:** `16px` (1 rem)
-* **Spacing increments:** multiples of `0.5rem` (8px)
-* **Headline sizes:**
+* **Base font size:** `16px` (1 rem)  
+* **Spacing increments:** multiples of `0.5rem` (8px)  
+* **Headline sizes:**  
+  ```css
+  h1 { font-size: 2.5rem; }  /* 40px */
+  h2 { font-size: 2rem; }    /* 32px */
+  h3 { font-size: 1.5rem; }  /* 24px */
+Section gutters: 1rem vertical spacing
 
-```css
-h1 { font-size: 2.5rem; }  /* 40px */
-h2 { font-size: 2rem; }    /* 32px */
-h3 { font-size: 1.5rem; }  /* 24px */
-```
+4. Border Radius & Z-Index
+Radius tokens:
 
-* **Section gutters:** `1rem` vertical spacing
-
----
-
-## 4. Border Radius & Z-Index
-
-* **Radius tokens:**
-
-```css
+css
+Copy
+Edit
 .radius-sm { border-radius: 0.25rem; }  /* 4px */
 .radius-md { border-radius: 0.5rem; }   /* 8px */
 .radius-lg { border-radius: 1rem; }     /* 16px */
-```
+Z-Index layers:
 
-* **Z-Index layers:**
-  \| Layer   | z-index |
-  \|---------|---------|
-  \| Header  | 900     |
-  \| Modal   | 1000    |
-  \| Tooltip | 1100    |
+Layer	z-index
+Header	900
+Modal	1000
+Tooltip	1100
 
----
-
-## 5. Button States
-
-```css
+5. Button States
+css
+Copy
+Edit
 .btn-primary {
   background: #5151FF;
   color: #FAFAFA;
@@ -95,11 +80,9 @@ h3 { font-size: 1.5rem; }  /* 24px */
   transition: opacity 0.2s;
 }
 .btn-primary:hover {
-  background: #3E3BFF;
   opacity: 0.9;
 }
 .btn-primary:active {
-  background: #3348CC;
   opacity: 0.95;
 }
 .btn-primary:disabled {
@@ -107,45 +90,20 @@ h3 { font-size: 1.5rem; }  /* 24px */
   color: #666666;
   cursor: not-allowed;
 }
-```
+6. Container & Grid Guidelines
+Max-widths:
 
----
+Desktop: 1200px
 
-```css
-.btn-primary {
-  background: #5151FF;
-  color: #FAFAFA;
-  border: none;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-.btn-primary:hover {
-  background: #3E3BFF;
-  opacity: 0.9;
-}
-.btn-primary:active {
-  background: #3348CC;
-  opacity: 0.95;
-}
-.btn-primary:disabled {
-  background: #A0A0A0;
-  color: #666666;
-  cursor: not-allowed;
-}
-```
+Tablet: 768px
 
----
+Mobile: 100%
 
-## 6. Container & Grid Guidelines
+Grid system:
 
-* **Max-widths:**
-
-  * Desktop: `1200px`
-  * Tablet: `768px`
-  * Mobile: `100%`
-* **Grid system:**
-
-```css
+css
+Copy
+Edit
 .container {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
@@ -159,95 +117,92 @@ h3 { font-size: 1.5rem; }  /* 24px */
 @media (max-width: 480px) {
   .container { grid-template-columns: 1fr; }
 }
-```
+Feature cards (Flex):
 
-* **Feature cards (Flex):**
-
-```css
+css
+Copy
+Edit
 .features {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
   justify-content: center;
 }
-```
+7. Accessibility Details
+Semantic tags: <header>, <main>, <footer>
 
----
+Skip link:
 
-## 7. Accessibility Details
-
-* **Semantic tags:** use `<header>`, `<main>`, `<footer>`
-* **Skip link:**
-
-```html
+html
+Copy
+Edit
 <a href="#main" class="skip-link">Skip to main content</a>
-```
+Contrast (WCAG AA):
 
-* **Contrast (WCAG AA):**
+White on Jet Black = 21:1
 
-  * White on Jet Black = 21:1
-  * Soft Gray on Jet Black = 15:1
-* **Form labels & validation:**
+Soft Gray on Jet Black = 15:1
 
-```html
+Form labels & validation:
+
+html
+Copy
+Edit
 <label for="email">Email address</label>
 <input id="email" type="email" required>
 <p class="error-msg" id="email-error" aria-live="assertive">Please enter a valid email.</p>
-```
+Error animation:
 
-* **Error animation:**
-
-```css
+css
+Copy
+Edit
 .error-msg {
   transition: opacity 0.2s ease-in;
   opacity: 0;
 }
 .error-msg.visible { opacity: 1; }
-```
+Focus outlines:
 
-* **Focus outlines:**
-
-```css
+css
+Copy
+Edit
 :focus {
   outline: 2px solid #5151FF;
   outline-offset: 2px;
 }
-```
+Reduced-motion:
 
-* **Reduced-motion:**
-
-```css
+css
+Copy
+Edit
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }
-```
+ARIA labels for icons:
 
-* **ARIA labels for icons:**
-
-```html
-<img src="ICON_SIGNAL.svg" alt="" aria-label="Signal over noise">
-```
-
----
-
-## 8. SEO & Meta Enhancements
-
-```html
+html
+Copy
+Edit
+<img src="/assets/icons/ICON_SIGNAL.svg" alt="" aria-label="Signal over noise">
+8. SEO & Meta Enhancements
+html
+Copy
+Edit
 <title>Join the Javlin Waitlist – Remember What Matters</title>
 <meta name="description" content="Join Javlin’s AI Memory Engine waitlist to get personalized spaced-repetition reminders.">
-<link rel="canonical" href="https://waitlist.javlin.ai/">
+<link rel="canonical" href="https://javlin-waitlist.vercel.app/">
 <meta name="robots" content="noindex">
 
 <!-- Open Graph -->
 <meta property="og:title" content="Join the Javlin Waitlist – Remember What Matters">
 <meta property="og:description" content="Join Javlin’s AI Memory Engine waitlist to get personalized spaced-repetition reminders.">
-<meta property="og:image" content="https://waitlist.javlin.ai/og-image.png">
+<meta property="og:image" content="https://javlin-waitlist.vercel.app/og-image.png">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Join the Javlin Waitlist – Remember What Matters">
 <meta name="twitter:description" content="Join Javlin’s AI Memory Engine waitlist to get personalized spaced-repetition reminders.">
-<meta name="twitter:image" content="https://waitlist.javlin.ai/og-image.png">
+<meta name="twitter:image" content="https://javlin-waitlist.vercel.app/og-image.png">
 
 <!-- JSON-LD Structured Data -->
 <script type="application/ld+json">
@@ -255,301 +210,333 @@ h3 { font-size: 1.5rem; }  /* 24px */
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": "Javlin",
-  "url": "https://waitlist.javlin.ai/"
+  "url": "https://javlin-waitlist.vercel.app/"
 }
 </script>
-```
+9. Assets & Performance
+Naming & structure:
 
----
+/assets/icons/ICON_SIGNAL.svg
 
-## 9. Assets & Performance
+/assets/icons/ICON_IDENTITY.svg
 
-* **Naming & structure:**
+/assets/icons/ICON_SPACED.svg
 
-  * `/assets/icons/ICON_SIGNAL.svg`
-  * `/assets/icons/ICON_IDENTITY.svg`
-  * `/assets/icons/ICON_SPACED.svg`
-* **Image formats & sizing:** icons as SVG (<10 KB), photos as WebP (max 800 px)
-* **Lazy-load images:**
+Image formats & sizing: icons as SVG (< 10 KB), photos as WebP (max 800 px)
 
-```html
+Lazy-load images:
+
+html
+Copy
+Edit
 <img src="…" loading="lazy" alt="">
-```
+Font-loading strategy:
 
-* **Font-loading strategy:**
-
-```html
+html
+Copy
+Edit
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-```
+Critical vs. deferred CSS:
 
-* **Critical vs. deferred CSS:**
-
-```html
+html
+Copy
+Edit
 <style>/* inline critical hero CSS */</style>
 <link rel="stylesheet" href="styles.css" media="print" onload="this.media='all'">
-```
+10. Copy & Tone
+Voice & tone: “Calm. Clear. Grounded.” — concise, active, minimal jargon
 
----
+Microcopy templates:
 
-## 10. Copy & Tone
+Error: “Please enter a valid email.”
 
-* **Voice & tone:** “Calm. Clear. Grounded.” — concise, active, minimal jargon
-* **Microcopy templates:**
+Confirmation: “Thanks! Check your inbox—your first Spark arrives tomorrow.”
 
-  * Error: “Please enter a valid email.”
-  * Confirmation: “Thanks! Check your inbox—your first Spark arrives tomorrow.”
-  * CTA: “Join the waitlist”
-* **Punctuation & capitalization:**
+CTA: “Join the waitlist”
 
-  * Buttons/headings: Title Case
-  * Body: Sentence case, period at end, sparing exclamation points
+Punctuation & capitalization:
 
----
+Buttons/headings: Title Case
 
-## 11. Analytics & Privacy
+Body: Sentence case, period at end, sparing exclamation points
 
-* **Analytics snippet placeholder:**
+11. Analytics & Privacy
+Analytics snippet placeholder:
 
-  ```html
-  <!-- INSERT analytics script here -->
-  ```
-* **Privacy Policy link:** footer link text “Privacy Policy” → `/privacy`
-* **Consent banner basics:**
+html
+Copy
+Edit
+<!-- INSERT analytics script here -->
+Privacy Policy link: footer link text “Privacy Policy” → /privacy
 
-  ```html
-  <!-- GDPR banner: “We use cookies to improve your experience.” [Accept] -->
-  ```
+Consent banner basics:
 
----
+html
+Copy
+Edit
+<!-- GDPR banner: “We use cookies to improve your experience.” [Accept] -->
+12. Maintenance & QA
+Verify semantic tags (<header>, <main>, <footer>) in the DOM.
 
-## 12. Maintenance & QA
+Test form: empty/invalid submit → inline error + ARIA alert.
 
-1. Verify semantic tags (`<header>`, `<main>`, `<footer>`) in the DOM.
-2. Test form: empty/invalid submit → inline error + ARIA alert.
-3. Keyboard nav: tab through all interactive elements → visible focus outlines.
-4. Run accessibility audit (contrast, labels).
-5. Inspect source: verify `<title>`, meta description, OG, Twitter tags.
-6. Check network: images lazy-load, font-display swap.
-7. Test responsive breakpoints: desktop, tablet, mobile.
-8. Measure performance: Lighthouse LCP/FID within targets.
-9. Confirm analytics fires post-consent and privacy link is visible.
+Keyboard nav: tab through all interactive elements → visible focus outlines.
 
----
+Run accessibility audit (contrast, labels).
 
-## 13. Backend Architecture & Services
+Inspect source: verify <title>, meta description, OG, Twitter tags.
 
-### 13.1 API Endpoints (v1)
+Check network: images lazy-load, font-display swap.
 
-* **Versioning:** All routes prefixed with `/v1` (e.g. `POST /v1/waitlist`).
-* **OpenAPI Schema:** Define request and response bodies, query parameters, headers, and error codes for each endpoint in an OpenAPI 3.0 document.
-* **Endpoints:**
+Test responsive breakpoints: desktop, tablet, mobile.
 
-  * **POST /v1/waitlist**
+Measure performance: Lighthouse LCP/FID within targets.
 
-    * Body schema: `{ email: string }`
-    * Responses: `201 Created`, `400 Bad Request`, `429 Too Many Requests`
-    * Rate-limit: 100 requests/hour per IP.
-  * **GET /v1/users/{id}/sparks**
+Confirm analytics fires post-consent and privacy link is visible.
 
-    * Responses: `200 OK` with list of Sparks, `401 Unauthorized`
-  * **POST /v1/users/{id}/sparks**
+13. Backend Architecture & Services
+13.1 API Endpoints (v1)
+Versioning: All routes prefixed with /v1 (e.g. POST /v1/waitlist).
 
-    * Body schema: `{ content: string, source: enum }`
-    * Responses: `201 Created`, `400 Bad Request`, `401 Unauthorized`
-  * **PATCH /v1/users/{id}/sparks/{sparkId}**
+OpenAPI Schema: Define request/response bodies, query parameters, headers, and error codes in OpenAPI 3.0.
 
-    * Body schema: partial Spark update
-    * Responses: `200 OK`, `400`, `404 Not Found`, `401`
-  * **DELETE /v1/users/{id}/sparks/{sparkId}**
+Endpoints:
 
-    * Responses: `204 No Content`, `404`, `401`
-  * **Auth:**
+POST /v1/waitlist
 
-    * `POST /v1/auth/signup`
-    * `POST /v1/auth/login`
-    * `POST /v1/auth/refresh`
+Body: { email: string }
 
-### 13.2 Data Model & Storage
+Responses: 201 Created, 400 Bad Request, 429 Too Many Requests
 
-* **User**
+Rate-limit: 100 req/hr per IP
 
-  * `id` (UUID, PK), `email` (unique, indexed), `created_at` (timestamp), `preferences` (JSON with typed keys).
-  * Constraints: email unique.
-* **Spark**
+GET /v1/users/{id}/sparks
 
-  * `id` (UUID, PK), `user_id` (UUID, FK ON DELETE CASCADE), `content` (text), `source` (enum), `created_at` (timestamp).
-  * Index on `user_id` and composite unique on (`user_id`, `source`, `created_at`).
-* **Review**
+Responses: 200 OK with list, 401 Unauthorized
 
-  * `id` (UUID, PK), `spark_id` (UUID, FK ON DELETE CASCADE), `due_date` (date, indexed), `interval` (integer), `easiness_factor` (float).
-  * Index on `due_date` for scheduling.
+POST /v1/users/{id}/sparks
 
-### 13.3 Decoupled AI Processing Pipeline
+Body: { content: string, source: enum }
 
-1. **Ingestion Service**
+Responses: 201 Created, 400, 401
 
-   * Receives inputs on `/v1/ingest`, publishes messages to queue (e.g. SQS, Kafka).
-2. **Spark Generator**
+PATCH /v1/users/{id}/sparks/{sparkId}
 
-   * Subscribes to queue, invokes AI model, publishes generated Spark to a secondary queue.
-3. **Persistence Worker**
+Body: partial Spark update
 
-   * Subscribes to Spark queue, upserts Spark to DB, schedules initial Review.
-4. **Reliability:**
+Responses: 200 OK, 400, 404, 401
 
-   * Retry policy: 3 retries with exponential backoff.
-   * Dead-letter queue for failures.
-   * Metrics: processed count, error rate, latency histograms.
+DELETE /v1/users/{id}/sparks/{sparkId}
 
-### 13.4 Scheduler & Notifications
+Responses: 204 No Content, 404, 401
 
-* **Timezone-Aware Jobs:**
+Auth:
 
-  * Cron triggers at midnight UTC, compute each user’s local reset based on `preferences.timezone`.
-* **Email Delivery:**
+POST /v1/auth/signup
 
-  * Use SendGrid/SES with retry (3 attempts) and dead-letter logs.
-* **Push Notifications:**
+POST /v1/auth/login
 
-  * Opt-in flag in `preferences.notifications.push`.
-  * Use FCM, record consent timestamp.
+POST /v1/auth/refresh
 
-### 13.5 Authentication & Security
+13.2 Data Model & Storage
+User
 
-* **JWT Strategy:**
+id (UUID, PK), email (unique, indexed), created_at (timestamp), preferences (typed JSON)
 
-  * Access token 15m expiry, Refresh token 30d expiry, rotation on use.
-* **CSRF Protection:**
+Constraints: email unique
 
-  * SameSite=strict cookies and double-submit CSRF tokens for state‑changing routes.
-* **Rate Limiting/Mitigation:**
+Spark
 
-  * Apply at API gateway: 100 req/hr per IP for public endpoints.
-* **Audit Logging:**
+id (UUID, PK), user_id (UUID FK ON DELETE CASCADE), content (text), source (enum), created_at (timestamp)
 
-  * Log auth events (signup, login, refresh, logout) with user ID, timestamp, IP.
+Index on user_id, unique on (user_id, source, created_at)
 
-### 13.6 DevOps, CI/CD & Monitoring
+Review
 
-* **CI/CD Gates:**
+id (UUID, PK), spark_id (UUID FK ON DELETE CASCADE), due_date (date, indexed), interval (int), easiness_factor (float)
 
-  * Unit test coverage ≥80%, integration coverage ≥50%. Fail build if unmet.
-* **Health Endpoint:**
+Index on due_date
 
-  * `/v1/health` returns JSON status of DB, queue, AI service.
-* **SLOs/SLIs:**
+13.3 Decoupled AI Processing Pipeline
+Ingestion Service
 
-  * 99.9% uptime, p95 latency <200ms, error rate <1%.
-* **Error Tracking:**
+Receives inputs on /v1/ingest, publishes to queue (SQS/Kafka)
 
-  * Sentry integration for unhandled exceptions.
-* **Performance Dashboards:**
+Spark Generator
 
-  * Datadog or Grafana dashboards for request rates, latencies, queue depth.
+Subscribes to queue, invokes AI model, publishes Spark to secondary queue
 
----
+Persistence Worker
 
-## 14. Extended Considerations
+Subscribes to Spark queue, upserts to DB, schedules initial Review
 
-### 14.1 Dark Mode & Theming
+Reliability:
 
-* Support user preference via CSS media query:
+Retry policy: 3× with exponential backoff
 
-  ```css
-  @media (prefers-color-scheme: dark) { /* dark theme overrides */ }
-  ```
-* Define `--color-*` tokens for both light and dark palettes.
-* Provide a UI toggle to manually switch themes and persist in `preferences.theme`.
+Dead-letter queue for failures
 
-### 14.2 Internationalization (i18n)
+Metrics: processed count, error rate, latency histograms
 
-* Use locale file structure: `/i18n/{lang}.json` with key-value pairs.
-* Format dates/numbers via `Intl.DateTimeFormat` and `Intl.NumberFormat`.
-* Default locale derived from browser or `preferences.locale`.
+13.4 Scheduler & Notifications
+Timezone-Aware Jobs: Cron at midnight UTC → compute per-user local reset from preferences.timezone
 
-### 14.3 Progressive Web App (PWA)
+Email Delivery: SendGrid/SES with 3× retry and dead-letter logs
 
-* Add `manifest.json` with `name`, `icons`, `start_url`, `display`.
-* Implement service worker (`sw.js`) to cache critical assets and offline fallback.
-* Define cache strategies (stale-while-revalidate for CSS/JS, cache-first for icons).
+Push Notifications (optional): Opt-in via preferences.notifications.push, use FCM, record consent
 
-### 14.4 Testing & QA Standards
+13.5 Authentication & Security
+JWT Strategy: Access tokens 15 min expiry, refresh tokens 30 d expiry, rotation on use
 
-* E2E tests with Cypress or Playwright; store tests in `/tests/e2e`.
-* Use naming conventions: `*.spec.ts` for tests, group by feature.
-* CI runs tests on PRs; block merges on failures.
+CSRF Protection: SameSite=strict cookies + double-submit CSRF tokens
 
-### 14.5 Security & HTTP Headers
+Rate Limiting: 100 req/hr per IP on public endpoints
 
-* Content Security Policy (CSP):
+Audit Logging: Record auth events (signup, login, refresh, logout) with user ID, timestamp, IP
 
-  ```html
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline';">
-  ```
-* Enforce HSTS, X-Frame-Options, Referrer-Policy:
+13.6 DevOps, CI/CD & Monitoring
+CI/CD Gates: Unit coverage ≥ 80%, integration ≥ 50%; fail build if unmet
 
-  ```http
-  Strict-Transport-Security: max-age=31536000; includeSubDomains
-  X-Frame-Options: DENY
-  Referrer-Policy: no-referrer-when-downgrade
-  ```
+Health Endpoint: /v1/health returns DB, queue, AI service status
 
-### 14.6 Performance Budgets
+SLOs/SLIs: 99.9% uptime, p95 latency < 200 ms, error rate < 1%
 
-* Limit CSS/JS bundles to ≤150 KB each.
-* Image payload budget ≤200 KB per page.
-* Monitor via Lighthouse CI in pipeline; fail if scores drop below 90/90/90.
+Error Tracking: Sentry integration for exceptions
 
-### 14.7 Legal & Compliance
+Performance Dashboards: Datadog/Grafana for request rates, latencies, queue depth
 
-* Data retention: purge waitlist emails after 60 days if unsubscribed.
-* GDPR/CCPA notes: outline data export/deletion endpoints.
-* Privacy policy review every 6 months.
+14. Extended Considerations
+14.1 Dark Mode & Theming
+CSS media query support:
 
-### 14.8 Developer Experience
+css
+Copy
+Edit
+@media (prefers-color-scheme: dark) { /* overrides */ }
+Define dual --color-* tokens for light/dark
 
-* Commit message convention: `type(scope): description` with emoji prefix (e.g., `✨ feat(api): add signup endpoint`).
-* Branch naming: `feature/xyz`, `bugfix/abc`, `hotfix/123`.
-* PR Checklist: description, linked issue, tests added, review required.
+Provide UI toggle, persist in preferences.theme
 
-### 14.9 SEO Enhancements
+14.2 Internationalization (i18n)
+Locale files: /i18n/{lang}.json with key–value pairs
 
-* Generate and publish `sitemap.xml` at root, update on deploy.
-* Include `robots.txt`:
+Format via Intl.DateTimeFormat, Intl.NumberFormat
 
-  ```txt
-  User-agent: *
-  Disallow:
-  Sitemap: https://waitlist.javlin.ai/sitemap.xml
-  ```
-* Use `rel="next"`/`rel="prev"` for paginated future pages.
+Default locale from browser or preferences.locale
 
-## 15. Roadmap & Phasing
+14.3 Progressive Web App (PWA)
+Add manifest.json (name, icons, start_url, display)
 
+Service worker (sw.js) caching strategies:
+
+stale-while-revalidate for CSS/JS
+
+cache-first for icons
+
+Offline fallback page
+
+14.4 Testing & QA Standards
+E2E tests in /tests/e2e with Cypress/Playwright
+
+Naming: *.spec.ts, group by feature
+
+CI runs tests on PRs; block merges on failures
+
+14.5 Security & HTTP Headers
+CSP:
+
+html
+Copy
+Edit
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline';">
+HSTS, X-Frame-Options, Referrer-Policy:
+
+pgsql
+Copy
+Edit
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Frame-Options: DENY
+Referrer-Policy: no-referrer-when-downgrade
+14.6 Performance Budgets
+CSS/JS bundles ≤ 150 KB each
+
+Image payload ≤ 200 KB per page
+
+Lighthouse CI thresholds: scores ≥ 90/90/90; fail pipeline if not met
+
+14.7 Legal & Compliance
+Data retention: purge waitlist emails after 60 days if unsubscribed
+
+GDPR/CCPA endpoints: export/delete user data
+
+Privacy policy review every 6 months
+
+14.8 Developer Experience
+Commit messages: ✨ feat(api): add signup endpoint
+
+Branch naming: feature/xyz, bugfix/abc, hotfix/123
+
+PR Checklist: issue linked, tests added, review required
+
+14.9 SEO Enhancements
+Publish sitemap.xml at root, update on deploy
+
+Include robots.txt:
+
+makefile
+Copy
+Edit
+User-agent: *
+Disallow:
+Sitemap: https://javlin-waitlist.vercel.app/sitemap.xml
+Use rel="next"/"prev" for pagination in future
+
+15. Roadmap & Phasing
 To launch quickly and scalably, we categorize CODEX sections into two phases:
 
-**Phase 1 (MVP Launch):**
-- Sections 1–7: Brand & Styles, Layout, Sizing, Radii, Button States, Grid, Accessibility  
-- Sections 8–12: SEO & Meta, Assets & Performance, Copy & Tone, Analytics & Privacy, Maintenance & QA  
-- Section 13.1–13.2: API Endpoints v1, Data Model & Storage  
-- Section 13.5: Authentication & Security  
-- Section 13.6 (core): CI/CD gates, health endpoint, Sentry integration, basic metrics  
-- Section 14.4: Core E2E Testing & QA naming conventions  
-- Section 14.5: CSP, HSTS, X-Frame-Options, Referrer-Policy  
-- Section 14.6 (core budgets): JS/CSS ≤150 KB, image ≤200 KB, Lighthouse CI thresholds  
-- Section 14.7: Data retention & GDPR/CCPA stubs  
-- Section 14.8: Git & PR conventions, branch naming rules  
-- Section 14.9: sitemap.xml, robots.txt stub  
+Phase 1 (MVP Launch):
 
-**Phase 2 (Post-Launch Enhancements):**
-- Section 13.3: Decoupled AI Pipeline (queueing, retries, DLQ, metrics)  
-- Section 13.4: Timezone-aware scheduler, push notifications opt-in  
-- Section 14.1: Dark Mode & Theming UI toggle  
-- Section 14.2: Internationalization (i18n) support  
-- Section 14.3: Progressive Web App (manifest, service worker, offline)  
-- Section 14.6 (advanced dashboards): detailed performance budgets and dashboards  
+Sections 1–7: Brand & Styles, Layout, Sizing, Radii, Button States, Grid, Accessibility
+
+Sections 8–12: SEO & Meta, Assets & Performance, Copy & Tone, Analytics & Privacy, Maintenance & QA
+
+Section 13.1–13.2: API Endpoints v1, Data Model & Storage
+
+Section 13.5: Authentication & Security
+
+Section 13.6 (core): CI/CD gates, health endpoint, Sentry integration, basic metrics
+
+Section 14.4: Core E2E Testing & QA naming conventions
+
+Section 14.5: CSP, HSTS, X-Frame-Options, Referrer-Policy
+
+Section 14.6 (core budgets): JS/CSS ≤ 150 KB, image ≤ 200 KB, Lighthouse CI thresholds
+
+Section 14.7: Data retention & GDPR/CCPA stubs
+
+Section 14.8: Git & PR conventions, branch naming rules
+
+Section 14.9: sitemap.xml, robots.txt stub
+
+Phase 2 (Post-Launch Enhancements):
+
+Section 13.3: Decoupled AI Pipeline (queueing, retries, DLQ, metrics)
+
+Section 13.4: Timezone-aware scheduler, push notifications opt-in
+
+Section 14.1: Dark Mode & Theming UI toggle
+
+Section 14.2: Internationalization (i18n) support
+
+Section 14.3: Progressive Web App (manifest, service worker, offline)
+
+Section 14.6 (advanced dashboards): detailed performance budgets and dashboards
+
+Copy
+Edit
+
 
 
 
