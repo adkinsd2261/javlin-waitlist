@@ -1,0 +1,32 @@
+name: Auto-bump CODEX version
+
+# Run every day at midnight UTC (you can adjust the cron schedule)
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  bump-codex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Bump CODEX.md header to today’s date
+        run: |
+          # Compute version as YYYY.MM.DD
+          new_version="v$(date +'%Y.%m.%d')"
+          # Replace only the first line that starts with "# Javlin Waitlist CODEX"
+          sed -E -i "1s/^# Javlin Waitlist CODEX v[0-9]+\.[0-9]+\.[0-9]+/# Javlin Waitlist CODEX ${new_version}/" CODEX.md
+
+      - name: Commit version bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add CODEX.md
+          git diff --staged --quiet || git commit -m "chore: auto-bump CODEX to ${new_version}"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
