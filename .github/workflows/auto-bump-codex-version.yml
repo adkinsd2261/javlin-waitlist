@@ -2,6 +2,7 @@ name: Auto-bump CODEX version
 
 # Run every day at midnight UTC (you can adjust the cron schedule)
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 0 * * *'
 
