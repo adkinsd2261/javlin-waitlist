@@ -1,420 +1,377 @@
-# Javlin Waitlist CODEX
+# Javlin Waitlist CODEX v1.2.1
 
-**Version:** 1.2 (2025-06-09)
-**Changelog:**
+## 0. Changelog & Versioning
 
-* v1.0: Initial spec
-* v1.1: Added Maintenance & QA, error animations, skip link, dark-mode note, phased roadmap
-* v1.2: Enhanced versioning policy, form reference, font-display swap, consent gating, roadmap highlighting
+* **v1.2.1** (2025‑06‑09)
 
-**Versioning Policy:**
+  * Added native form snippet under §2.3
+  * Replaced analytics placeholder with deferred loader & consent gating under §11
+  * Appended **Snippets Annex** grouping all code blocks
+* **v1.2** (2025‑06‑09)
 
-* **Major version (vX.0):** Increment when making breaking structural changes.
-* **Minor version (vX.Y):** Increment for non-breaking enhancements or clarifications.
-* **Update the Version & Date** at the top whenever you release a new version.
+  * Introduced Versioning Policy
+  * Clarified “native `<form>`” reference in §2.3
+  * Highlighted `font-display: swap` in §9
+  * Marked placeholders for consent gating in §11
+  * Added §15 **Roadmap & Phasing** for Phase 1 vs Phase 2
+* **v1.1** (2025‑06‑08)
 
----
+  * Final Audit & QA guidelines
+  * Skip link requirement
+  * Error animation details
+  * Dark‑mode note
 
 ## 1. Brand & Styles
 
-* **Font Stack**
+* **Font stack:**
 
-  * Primary: `Inter` (weights 400, 500, 600)
-  * Fallbacks: `Helvetica Neue`, `Arial`, `sans-serif`
-* **Color Palette**
+  * Inter weights 400, 500, 600
+  * Fallbacks: `Helvetica Neue`, Arial, sans‑serif
+* **CSS variables** (defined in `:root`):
 
-  * Jet Black: `#131313`
-  * White: `#FAFAFA`
-  * Neural Blue: `#5151FF`
-  * Soft Gray: `#EAEAEA`
-* **Dark Mode & Theming**
-
-  * Define `--color-*` tokens for light & dark palettes
-  * Support `@media (prefers-color-scheme: dark)` overrides
-  * UI toggle persisted under `preferences.theme`
-
----
+  ```css
+  :root {
+    --font-primary: 'Inter', 'Helvetica Neue', Arial, sans‑serif;
+    --color-jet-black: #131313;
+    --color-white: #FAFAFA;
+    --color-neural-blue: #5151FF;
+    --color-deep-night: #0F0F33;
+    --color-soft-gray: #EAEAEA;
+  }
+  ```
 
 ## 2. Layout & Structure
 
-1. **Hero**
+### 2.1 Hero Section
 
-   * `<header id="main" class="hero">` wrapper
-   * Contains: `<h1>`, `<p>`, CTA `<a>`
-2. **Features**
+```html
+<section id="hero">
+  <h1>Don’t lose yourself in the noise. Javlin is the signal.</h1>
+  <p>Your AI‑powered memory engine—capture meaning, recall brilliance.</p>
+  <a href="#waitlist" class="btn-primary">Join the waitlist</a>
+</section>
+```
 
-   * `<main class="features container">`
-   * Three `<div class="feature-card">` each with `<img>` + `<p>`
-3. **Waitlist Form**
+### 2.2 Features Section
 
-   * `<section id="waitlist" class="waitlist-form container">` contains our native `<form>` markup (email input, submit button) with inline validation and ARIA messaging (see §7).
-4. **Footer**
+```html
+<section class="features container">
+  <div class="feature-card">
+    <img src="/assets/icons/spark.svg" alt="Spark icon" />
+    <h3>AI Sparks</h3>
+    <p>Auto-generate flashcards from any content.</p>
+  </div>
+  <!-- Repeat for three cards total -->
+</section>
+```
 
-   * `<footer>` with minimal links (Twitter, Privacy Policy)
+### 2.3 Waitlist Form
 
----
+Here’s the exact native form markup to use (with ARIA, validation hooks, error & success messages):
+
+```html
+<section id="waitlist" class="waitlist-form container">
+  <form novalidate>
+    <label for="email">Email address</label>
+    <input
+      id="email"
+      name="email"
+      type="email"
+      required
+      aria-required="true"
+      aria-invalid="false"
+      placeholder="you@example.com"
+    />
+    <p class="error-msg" role="alert" aria-live="assertive" hidden>
+      Please enter a valid email.
+    </p>
+    <button type="submit" class="btn-primary">Join the waitlist</button>
+    <p class="success-msg" role="alert" aria-live="polite" hidden>
+      Thanks! Check your inbox—your first Spark arrives tomorrow.
+    </p>
+  </form>
+</section>
+```
 
 ## 3. Sizing & Spacing Scale
 
-* **Base font size:** `16px` (1 rem)
-* **Spacing increments:** multiples of `0.5rem` (8px)
-* **Headline sizes:**
+* Base font size: 16px (1rem)
+* Spacing increments: 0.5rem
+* Headlines:
 
-```css
-h1 { font-size: 2.5rem; }  /* 40px */
-h2 { font-size: 2rem; }    /* 32px */
-h3 { font-size: 1.5rem; }  /* 24px */
-```
-
-* **Section gutters:** `1rem` vertical spacing
-
----
+  * `h1`: 2.5rem
+  * `h2`: 2rem
+  * `h3`: 1.5rem
+* Section vertical gutters: 1rem
 
 ## 4. Border Radius & Z-Index
 
-* **Radius tokens:**
+* Border-radius classes:
 
-```css
-.radius-sm { border-radius: 0.25rem; }  /* 4px */
-.radius-md { border-radius: 0.5rem; }   /* 8px */
-.radius-lg { border-radius: 1rem; }     /* 16px */
-```
+  * `.radius-sm` = 0.25rem
+  * `.radius-md` = 0.5rem
+  * `.radius-lg` = 1rem
+* Z-index layers:
 
-* **Z-Index layers:**
-  \| Layer   | z-index |
-  \|---------|---------|
-  \| Header  | 900     |
-  \| Modal   | 1000    |
-  \| Tooltip | 1100    |
-
----
+  * Header: 900
+  * Modal: 1000
+  * Tooltip: 1100
 
 ## 5. Button States
 
 ```css
 .btn-primary {
-  background: #5151FF;
-  color: #FAFAFA;
-  border: none;
-  cursor: pointer;
-  transition: opacity 0.2s;
+  background: var(--color-neural-blue);
+  color: var(--color-white);
 }
-.btn-primary:hover { opacity: 0.9; }
-.btn-primary:active { opacity: 0.95; }
+.btn-primary:hover {
+  background: var(--color-deep-night);
+  opacity: 0.9;
+}
+.btn-primary:active {
+  background: #3348CC;
+}
 .btn-primary:disabled {
   background: #A0A0A0;
-  color: #666666;
+  color: #666;
   cursor: not-allowed;
 }
 ```
 
----
+## 6. Container & Grid
 
-## 6. Container & Grid Guidelines
+* `.container`: 12-column CSS Grid; `gap: 1rem`; `max-width: 1200px`.
 
-* **Max-widths:**
+  * Breakpoints:
 
-  * Desktop: `1200px`
-  * Tablet: `768px`
-  * Mobile: `100%`
-* **Grid system:**
-
-```css
-.container {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 1rem;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-@media (max-width: 768px) {
-  .container { grid-template-columns: repeat(6, 1fr); }
-}
-@media (max-width: 480px) {
-  .container { grid-template-columns: 1fr; }
-}
-```
-
-* **Feature cards (Flex):**
-
-```css
-.features {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center;
-}
-.feature-card {
-  text-align: center;
-  transition: transform 0.2s;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  background: var(--color-white);
-  color: var(--color-jet-black);
-}
-.feature-card:hover,
-.feature-card:focus {
-  transform: scale(1.05);
-  outline: 2px solid var(--color-neural-blue);
-  outline-offset: 2px;
-}
-```
-
----
+    * ≤768px → 6 columns
+    * ≤480px → 1 column
+* `.features`: `display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;`
 
 ## 7. Accessibility Details
 
-* **Semantic tags:** use `<header>`, `<main>`, `<footer>`
-* **Skip link:**
+* Semantic tags: `<header>`, `<main id="main">`, `<footer>`
+* **Skip link** at top of `<body>`:
 
-```html
-<a href="#main" class="skip-link">Skip to main content</a>
-```
+  ```html
+  <a class="skip-link" href="#main">Skip to main content</a>
+  ```
+* Contrast: WCAG AA ratios
+* Focus outlines:
 
-* **Contrast (WCAG AA):**
+  ```css
+  a:focus,
+  button:focus,
+  input:focus {
+    outline: 2px solid var(--color-neural-blue);
+    outline-offset: 2px;
+  }
+  ```
+* Reduced-motion support:
 
-  * White on Jet Black = 21:1
-  * Soft Gray on Jet Black = 15:1
-* **Form labels & validation:**
-
-```html
-<label for="email">Email address</label>
-<input id="email" name="email" type="email" placeholder="you@example.com" required>
-<p class="error-msg" id="email-error" aria-live="assertive"></p>
-<p class="success-msg" id="success-msg" aria-live="polite"></p>
-```
-
-* **Error animation:**
-
-```css
-.error-msg { opacity: 0; transition: opacity 0.2s ease-in; }
-.error-msg.visible { opacity: 1; }
-.success-msg { color: var(--color-neural-blue); }
-```
-
-* **Focus outlines:**
-
-```css
-:focus { outline: 2px solid var(--color-neural-blue); outline-offset: 2px; }
-```
-
-* **Reduced-motion:**
-
-```css
-@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
-```
-
-* **ARIA labels for icons:**
-
-```html
-<img src="ICON_SIGNAL.svg" alt="" aria-label="Signal over noise">
-```
-
----
+  ```css
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+  ```
+* ARIA labels on icons, inline error animation transitions
 
 ## 8. SEO & Meta Enhancements
 
 ```html
 <title>Join the Javlin Waitlist – Remember What Matters</title>
-<meta name="description" content="Join Javlin’s AI Memory Engine waitlist to get personalized spaced-repetition reminders.">
-<link rel="canonical" href="https://javlin-waitlist.vercel.app/">
-<meta name="robots" content="noindex">
-
-<!-- Open Graph -->
+<meta name="description" content="Be first in line for Javlin, the AI-powered memory engine that helps you remember what matters most.">
 <meta property="og:title" content="Join the Javlin Waitlist – Remember What Matters">
-<meta property="og:description" content="Join Javlin’s AI Memory Engine waitlist to get personalized spaced-repetition reminders.">
-<meta property="og:image" content="https://javlin-waitlist.vercel.app/og-image.png">
-
-<!-- Twitter Card -->
+<meta property="og:description" content="Be first in line for Javlin, the AI-powered memory engine that helps you remember what matters most.">
+<meta property="og:image" content="https://your-domain.com/assets/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Join the Javlin Waitlist – Remember What Matters">
-<meta name="twitter:description" content="Join Javlin’s AI Memory Engine waitlist to get personalized spaced-repetition reminders.">
-<meta name="twitter:image" content="https://javlin-waitlist.vercel.app/og-image.png">
-
-<!-- JSON-LD Structured Data -->
-<script type="application/ld+json">{
-  "@context":"https://schema.org",
-  "@type":"WebSite",
-  "name":"Javlin",
-  "url":"https://javlin-waitlist.vercel.app/"
-}
-</script>
+<meta name="twitter:description" content="Be first in line for Javlin, the AI-powered memory engine that helps you remember what matters most.">
+<meta name="twitter:image" content="https://your-domain.com/assets/og-image.png">
 ```
-
----
 
 ## 9. Assets & Performance
 
-* **Naming & structure:**
-
-  * `/assets/icons/ICON_SIGNAL.svg`
-  * `/assets/icons/ICON_IDENTITY.svg`
-  * `/assets/icons/ICON_SPACED.svg`
-* **Image formats & sizing:** SVG icons (<10 KB), photos as WebP (max 800 px)
-* **Lazy-load images:**
-
-```html
-<img src="..." loading="lazy" alt="">
-```
-
-* **Font-loading strategy:**
-
-```html
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
-```
-
-* **Critical vs. deferred CSS:**
-
-```html
-<style>/* inline critical hero CSS */</style>
-<link rel="stylesheet" href="styles.css" media="print" onload="this.media='all'">
-```
-
----
+* SVG icons in `/assets/icons/` <10KB each
+* WebP images ≤800px for photos; use `loading="lazy"`
+* `font-display: swap` on Google Fonts import
+* Defer non-critical CSS
 
 ## 10. Copy & Tone
 
-* **Voice & tone:** “Calm. Clear. Grounded.” — concise, active, minimal jargon
-* **Microcopy templates:**
+* **Voice:** Calm. Clear. Grounded.
+* **Microcopy:**
 
   * Error: “Please enter a valid email.”
   * Confirmation: “Thanks! Check your inbox—your first Spark arrives tomorrow.”
   * CTA: “Join the waitlist”
-* **Punctuation & capitalization:**
-
-  * Buttons/headings: Title Case
-  * Body: Sentence case, period at end, sparing exclamation points
-
----
+* Buttons & headings: Title Case; body text: sentence case
 
 ## 11. Analytics & Privacy
 
-* **Analytics snippet placeholder:**
+1. **Deferred Analytics Loader** (drop into `<head>`)
 
-```html
-<!-- INSERT analytics script here, load after consent banner acceptance -->
-```
+   ```html
+   <script>
+     function loadAnalytics() {
+       const script = document.createElement('script');
+       script.async = true;
+       script.src = 'https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX';
+       document.head.appendChild(script);
+       script.onload = () => {
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){ dataLayer.push(arguments); }
+         window.gtag = gtag;
+         gtag('js', new Date());
+         gtag('config', 'G-XXXXXXXXXX', { 'anonymize_ip': true });
+       };
+     }
+   </script>
+   ```
 
-* **Privacy Policy link:** footer link text “Privacy Policy” → `/privacy`
-* **Consent banner basics:**
+2. **Consent Banner** (insert immediately after `<body>`)
 
-```html
-<!-- GDPR consent banner: display banner, block analytics until Accept clicked -->
-```
+   ```html
+   <div id="consent-banner" class="consent-banner" role="dialog" aria-live="polite">
+     <p>
+       We use cookies to track usage and improve your experience.
+       <a href="/privacy">Privacy Policy</a>.
+     </p>
+     <button id="consent-accept" class="btn-primary">Accept</button>
+     <button id="consent-reject" class="btn-secondary">Reject</button>
+   </div>
+   ```
 
----
+3. **Consent Logic & Event Tracking** (before `</body>`, after validation script)
+
+   ```html
+   <script>
+   (function() {
+     function setCookie(n,v,d){
+       const e = d ? "; expires="+new Date(Date.now()+d*864e5).toUTCString() : "";
+       document.cookie = n+"="+v+e+"; path=/";
+     }
+     function getCookie(n){
+       return document.cookie.split('; ').reduce((r,c)=>c.startsWith(n+'=')?c.split('=')[1]:r,'');
+     }
+
+     const banner = document.getElementById('consent-banner');
+     const accept = document.getElementById('consent-accept');
+     const reject = document.getElementById('consent-reject');
+
+     if (!getCookie('cookie_consent')) {
+       banner.style.display = 'flex';
+     } else if (getCookie('cookie_consent') === 'accepted') {
+       loadAnalytics();
+     }
+
+     accept.addEventListener('click', () => {
+       setCookie('cookie_consent','accepted',365);
+       loadAnalytics();
+       banner.style.display = 'none';
+     });
+     reject.addEventListener('click', () => {
+       setCookie('cookie_consent','rejected',365);
+       banner.style.display = 'none';
+     });
+
+     const form = document.querySelector('#waitlist form');
+     form.addEventListener('submit', e => {
+       if (window.gtag) {
+         gtag('event', 'sign_up', { method: 'waitlist' });
+       }
+     });
+   })();
+   </script>
+   ```
 
 ## 12. Maintenance & QA
 
-1. Verify semantic tags (`<header>`, `<main>`, `<footer>`) in the DOM.
-2. Test form: empty/invalid submit → inline error + ARIA alert.
-3. Keyboard nav: tab through all interactive elements → visible focus outlines.
-4. Run accessibility audit (contrast, labels).
-5. Inspect source: verify `<title>`, meta description, OG, Twitter tags.
-6. Check network: images lazy-load, font-display swap.
-7. Test responsive breakpoints: desktop, tablet, mobile.
-8. Measure performance: Lighthouse LCP/FID within targets.
-9. Confirm analytics fires post-consent and privacy link is visible.
+* Nightly/aXe audits for accessibility and performance
+* Responsive testing on desktop, tablet, mobile
+* Performance budgets:
 
----
+  * LCP < 2.5s
+  * FID < 100ms
+  * TBT targets
+* Audit logging and monitoring setup (Sentry, Datadog)
 
-## 13. Backend Architecture & Services
+## 13. Dark Mode & Theming
 
-### 13.1 API Endpoints (v1)
+* CSS media query support:
 
-* **Versioning:** All routes prefixed with `/v1`
-* **OpenAPI Schema:** Document schemas and codes.
-* **Endpoints:**
-
-  * `POST /v1/waitlist` → `201`, `400`, `429`
-  * `GET /v1/users/{id}/sparks` → `200`, `401`
-  * `POST /v1/users/{id}/sparks` → `201`, `400`, `401`
-  * `PATCH /v1/users/{id}/sparks/{sparkId}` → `200`, `400`, `404`, `401`
-  * `DELETE /v1/users/{id}/sparks/{sparkId}` → `204`, `404`, `401`
-  * Auth: `POST /v1/auth/signup`, `POST /v1/auth/login`, `POST /v1/auth/refresh`
-
-### 13.2 Data Model & Storage
-
-* **User**: `id` (PK), `email` (unique, indexed), `created_at`, `preferences`
-* **Spark**: `id` (PK), `user_id` (FK, cascade delete), `content`, `source`, `created_at`
-* **Review**: `id` (PK), `spark_id` (FK, cascade delete), `due_date` (indexed), `interval`, `easiness_factor`
-
-### 13.3 Decoupled AI Pipeline
-
-1. Ingestion → queue
-2. Spark Generator → AI model → queue
-3. Persistence Worker → DB + schedule review
-4. Retries + dead-letter + metrics
-
-### 13.4 Scheduler & Notifications
-
-* Timezone-aware midnight cron
-* Email via SendGrid/SES with retries
-* Push opt-in via FCM
-
-### 13.5 Authentication & Security
-
-* JWT 15m/30d rotation
-* CSRF (SameSite + tokens)
-* Rate-limits (100/hr IP)
-* Audit logs
-
-### 13.6 DevOps, CI/CD & Monitoring
-
-* CI gates: unit ≥80%, integration ≥50%
-* `/v1/health` endpoint
-* SLOs: 99.9% uptime, p95 <200ms
-* Sentry + dashboards
-
----
+  ```css
+  @media (prefers-color-scheme: dark) {
+    body { background: var(--color-jet-black); color: var(--color-white); }
+  }
+  ```
 
 ## 14. Extended Considerations
 
-### 14.1 Dark Mode & Theming
-
-* Prefers-color-scheme support + toggle
-
-### 14.2 Internationalization (i18n)
-
-* `/i18n/{lang}.json`, `Intl` APIs
-
-### 14.3 Progressive Web App (PWA)
-
-* `manifest.json`, `sw.js`, offline fallback
-
-### 14.4 Testing & QA Standards
-
-* E2E `/tests/e2e`, `*.spec.ts`, CI enforcement
-
-### 14.5 Security & HTTP Headers
-
-* CSP, HSTS, X-Frame-Options, Referrer-Policy
-
-### 14.6 Performance Budgets
-
-* CSS/JS ≤150 KB, images ≤200 KB, Lighthouse CI
-
-### 14.7 Legal & Compliance
-
-* Data retention 60d, GDPR/CCPA endpoints, policy review
-
-### 14.8 Developer Experience
-
-* Commit conventions, branch rules, PR checklist
-
-### 14.9 SEO Enhancements
-
-* `sitemap.xml`, `robots.txt`, pagination tags
-
----
+* Internationalization (i18n)
+* PWA setup
+* End‑to‑end testing standards
+* HTTP security headers
+* SEO enhancements (`sitemap.xml`, `robots.txt`)
+* Legal/compliance (GDPR/CCPA beyond cookies)
+* Developer experience (commit/branch naming, PR checklists)
 
 ## 15. Roadmap & Phasing
 
-**🏁 Phase 1 (MVP):**  Sections 1–7, 8–12, 13.1–13.2, 13.5, core 13.6, 14.4–14.7, 14.8–14.9
-**Phase 2 (Post-Launch):**  Sections 13.3–13.4, 14.1–14.3, advanced dashboards
+* **Phase 1 (MVP)**:
+
+  1. CSS tokens & font preload
+  2. Base body styles & hero heading
+  3. Skip link
+  4. Meta tags
+  5. Waitlist form with validation & microcopy
+  6. Privacy banner & analytics consent
+  7. `.btn-primary` states & focus outlines
+  8. Responsive grid & spacing scale
+  9. Deploy pipeline & basic monitoring
+  10. Smoke‑test & QA
+* **Phase 2 (Post‑Launch)**:
+
+  * Dark mode toggle
+  * Modular sub‑editions (ADHD, Therapy, EDU)
+  * Internationalization
+  * E2E testing & CI/CD enhancements
+  * Advanced analytics (user funnels)
+  * Email drip campaigns & notifications
+
+---
+
+### Snippets Annex
+
+For easy reference, here are all critical code blocks in one place:
+
+1. **Waitlist Form**
+
+   ```html
+   <section id="waitlist" class="waitlist-form container"> … </section>
+   ```
+
+2. **Deferred Analytics Loader**
+
+   ```html
+   <script> function loadAnalytics() { … } </script>
+   ```
+
+3. **Consent Banner**
+
+   ```html
+   <div id="consent-banner" class="consent-banner"> … </div>
+   ```
+
+4. **Consent Logic & Tracking**
+
+   ```html
+   <script> (function(){ … })(); </script>
+   ```
+
 
 
 
